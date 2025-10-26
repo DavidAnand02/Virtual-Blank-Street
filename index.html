@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parniyan's Blank Street Surprise</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background: #FAF3E0; /* Linen */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .cafe-container {
+    background: #FAF3E0; /* Linen */
+    border-radius: 20px;
+    padding: 30px;
+    width: 360px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    border: 2px solid #2A4D14; /* Hooker's Green */
+  }
+
+  h1 {
+    font-weight: 700;
+    font-size: 24px;
+    color: #3B2F2F; /* Raisin Black */
+    margin-bottom: 10px;
+  }
+
+  .welcome {
+    font-size: 15px;
+    color: #2A4D14; /* Hooker's Green */
+    margin-bottom: 20px;
+  }
+
+  .menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .item {
+    background: #4C9141; /* Oxley */
+    color: #FAF3E0; /* Linen */
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 700;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+  }
+
+  .item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+
+  .message {
+    margin-top: 25px;
+    min-height: 100px;
+    font-size: 14px;
+    color: #3B2F2F; /* Raisin Black */
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+
+  .message strong {
+    color: #2A4D14; /* Hooker's Green */
+    font-size: 16px;
+  }
+
+  .fortune {
+    margin-top: 8px;
+    font-size: 13px;
+    font-style: italic;
+    color: #4C9141; /* Oxley */
+  }
+
+  .choice-btn {
+    background: #FAF3E0;
+    border: 2px solid #4C9141;
+    color: #2A4D14;
+    padding: 6px 12px;
+    margin: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: transform 0.2s, background 0.2s;
+  }
+
+  .choice-btn:hover {
+    background: #4C9141;
+    color: #FAF3E0;
+    transform: scale(1.05);
+  }
+
+  .emoji-animation {
+    display: inline-block;
+    animation: bounce 0.5s ease-in-out;
+  }
+
+  @keyframes bounce {
+    0% { transform: translateY(0);}
+    25% { transform: translateY(-8px);}
+    50% { transform: translateY(0);}
+    75% { transform: translateY(-4px);}
+    100% { transform: translateY(0);}
+  }
+</style>
+</head>
+<body>
+
+<div class="cafe-container">
+  <h1>🎉 Happy Birthday, Parniyan! 🎉</h1>
+  <div class="welcome">Your virtual Blank Street order awaits ☕🍪</div>
+
+  <div class="menu">
+    <div class="item" onclick="pickOption('Coffee')">☕ Coffee</div>
+    <div class="item" onclick="pickOption('Latte')">🥛 Latte</div>
+    <div class="item" onclick="pickOption('Cortado')">💥 Cortado</div>
+    <div class="item" onclick="pickOption('Iced Matcha')">🍵 Iced Matcha</div>
+    <div class="item" onclick="pickOption('Croissant')">🥐 Croissant</div>
+  </div>
+
+  <div class="message" id="message">
+    <div id="item-name"></div>
+    <div id="item-msg"></div>
+    <div id="choice-container"></div>
+    <div class="fortune" id="fortune"></div>
+  </div>
+</div>
+
+<script>
+const messages = {
+  "Coffee": [
+    {text: "A simple coffee to wake your senses ☀️", fortune: "Energy will attract unexpected joys 🌈"},
+    {text: "Classic coffee, bold and reliable ⚡", fortune: "A small opportunity will present itself today 💡"},
+    {text: "Coffee brewed just right, nothing extra ☕", fortune: "Your focus will bring success soon 🌟"},
+    {text: "Warm coffee, ready to kickstart your day 🔥", fortune: "A surprise meeting may spark joy 👀"},
+    {text: "Rich and aromatic coffee, the perfect morning companion 🌞", fortune: "Your energy will inspire someone today ✨"}
+  ],
+  "Latte": [
+    {text: "Smooth and creamy latte, a hug in a cup ☕", fortune: "Today brings a small delight your way 🌟"},
+    {text: "Smooth latte, a gentle sip of comfort 🥛", fortune: "Someone will brighten your day unexpectedly 😊"},
+    {text: "Velvety latte, perfect for a cozy moment 🍶", fortune: "A cheerful surprise is heading your way 🎁"},
+    {text: "Latte with a swirl of joy ☁️", fortune: "Your kindness will return to you multiplied 💖"},
+    {text: "Creamy latte, a little indulgence for you ✨", fortune: "A happy coincidence will make you smile 😄"}
+  ],
+  "Cortado": [
+    {text: "Bold cortado to awaken your senses ⚡", fortune: "Take a small risk—it might pay off 💡"},
+    {text: "Cortado, short and sharp like your focus 🔥", fortune: "Your decision today could surprise you ✨"},
+    {text: "Strong cortado, perfect for clarity 🧠", fortune: "Expect a sudden insight or idea 💡"},
+    {text: "Cortado with a kick, energizing ⚡", fortune: "A bold move today could lead to fun results 🎉"},
+    {text: "Short but powerful cortado ☕", fortune: "Confidence will bring an unexpected reward 🏆"}
+  ],
+  "Iced Matcha": [
+    {text: "Refreshing iced matcha, cool and balanced ❄️", fortune: "A surprise encounter is coming your way 👀"},
+    {text: "Iced matcha, fresh and revitalizing 🍃", fortune: "A new idea will spark creativity 🌟"},
+    {text: "Chilled matcha, a calm pause in your day 🌿", fortune: "A pleasant surprise will make you smile 😊"},
+    {text: "Iced matcha, green and serene 🍵", fortune: "Someone appreciates your thoughtfulness 💌"},
+    {text: "Cool matcha delight, refreshing your mood ❄️", fortune: "An unexpected message brings joy 📬"}
+  ],
+  "Croissant": [
+    {text: "Flaky croissant, a little treat for you 🥐", fortune: "Good fortune is layered, just like this pastry 🍀"},
+    {text: "Buttery croissant, perfection in every bite 🥖", fortune: "A sweet surprise awaits you today 🎁"},
+    {text: "Warm croissant, golden and delightful 🌟", fortune: "Something delightful will come your way soon ✨"},
+    {text: "Croissant, flaky joy in each layer 🥐", fortune: "A small gesture will brighten your day 😊"},
+    {text: "Indulgent croissant, treat yourself today 🍯", fortune: "Happiness comes in unexpected layers 🌈"}
+  ]
+};
+
+// Options for mini choice
+const choices = {
+  "Coffee": ["☕ Black", "🥛 With Milk"],
+  "Latte": ["🍯 Sweetened", "🫛 Unsweetened"],
+  "Cortado": ["🔥 Hot", "❄️ Iced"],
+  "Iced Matcha": ["🍋 With Lemon", "🥄 Pure"],
+  "Croissant": ["🍫 Chocolate Filled", "🥐 Plain"]
+};
+
+function pickOption(item) {
+  const choiceContainer = document.getElementById('choice-container');
+  const itemName = document.getElementById('item-name');
+  const itemMsg = document.getElementById('item-msg');
+  const fortune = document.getElementById('fortune');
+  const msgDiv = document.getElementById('message');
+
+  msgDiv.style.opacity = 0;
+
+  setTimeout(() => {
+    itemName.innerHTML = `<strong>${item}</strong>`;
+    itemMsg.innerHTML = "Choose your option:";
+
+    // Clear previous choices
+    choiceContainer.innerHTML = "";
+
+    // Add buttons for mini choice
+    choices[item].forEach(opt => {
+      const btn = document.createElement('button');
+      btn.innerHTML = opt;
+      btn.className = "choice-btn emoji-animation";
+      btn.onclick = () => showMessage(item, opt);
+      choiceContainer.appendChild(btn);
+    });
+
+    msgDiv.style.opacity = 1;
+  }, 300);
+}
+
+function showMessage(item, option) {
+  const msgDiv = document.getElementById('message');
+  const itemMsg = document.getElementById('item-msg');
+  const fortune = document.getElementById('fortune');
+  const choiceContainer = document.getElementById('choice-container');
+
+  // Pick random variation
+  const options = messages[item];
+  const choice = options[Math.floor(Math.random() * options.length)];
+
+  // Option-specific tweak
+  const textWithOption = `${choice.text} (${option})`;
+  const fortuneWithEmoji = `${choice.fortune} ✨`;
+
+  itemMsg.innerHTML = `<span class="emoji-animation">${textWithOption}</span>`;
+  fortune.innerHTML = `<span class="emoji-animation">${fortuneWithEmoji}</span>`;
+
+  // Remove choice buttons after selection
+  choiceContainer.innerHTML = "";
+}
+</script>
+
+</body>
+</html>
